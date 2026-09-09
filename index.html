@@ -93,7 +93,7 @@
 
   <!-- Header -->
   <header class="sticky top-0 z-40 bg-black/80 backdrop-blur-md border-b border-card px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-2.5">
+    <div class="flex items-center gap-2.5 cursor-pointer" onclick="goHome()">
       <img src="https://i.ibb.co/4Zm9MpxX/Yellow-Black-Brush-Streetwear-Brand-Logo.png" alt="Store Logo" class="w-9 h-9 rounded-full object-cover border border-card shadow-md">
       <div>
         <h1 class="font-bold text-base leading-tight tracking-wide">UNCLE JACK STORE</h1>
@@ -117,121 +117,128 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="p-4 text-center my-6 max-w-xl mx-auto relative z-10 w-full">
-    <div class="inline-flex items-center gap-2 bg-card/80 border border-card text-xs px-3.5 py-1.5 rounded-full text-gray-300 mb-5">
-      <i data-lucide="sparkles" class="w-4 h-4 text-accent-red"></i>
-      Best Prices on PS Games & PS Plus
-    </div>
-    <h2 class="text-3xl font-black mb-3 tracking-tight">Level Up Your <span class="accent-red">Gaming</span></h2>
-    <p class="text-gray-400 text-xs leading-relaxed mb-6 max-w-md mx-auto">
-      Buy PlayStation games and PS Plus subscriptions at competitive prices, fast & secure activation, and direct support on WhatsApp.
-    </p>
-    <div class="flex gap-3 justify-center">
-      <button onclick="switchTab('games')" class="bg-accent-red text-white font-bold text-sm px-6 py-3 rounded-xl btn-glow hover:opacity-90 transition">Browse Products</button>
-      <button onclick="switchTab('plus')" class="bg-card border border-card text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-gray-800 transition">Get PS Plus</button>
-    </div>
-  </section>
+  <!-- MAIN APP CONTAINER -->
+  <div id="main-view">
+    <!-- Hero Section -->
+    <section class="p-4 text-center my-6 max-w-xl mx-auto relative z-10 w-full">
+      <div class="inline-flex items-center gap-2 bg-card/80 border border-card text-xs px-3.5 py-1.5 rounded-full text-gray-300 mb-5">
+        <i data-lucide="sparkles" class="w-4 h-4 text-accent-red"></i>
+        Best Prices on PS Games & PS Plus
+      </div>
+      <h2 class="text-3xl font-black mb-3 tracking-tight">Level Up Your <span class="accent-red">Gaming</span></h2>
+      <p class="text-gray-400 text-xs leading-relaxed mb-6 max-w-md mx-auto">
+        Buy PlayStation games and PS Plus subscriptions at competitive prices, fast & secure activation, and direct support on WhatsApp.
+      </p>
+      <div class="flex gap-3 justify-center">
+        <button id="hero-btn-games" onclick="switchTab('games')" class="bg-accent-red text-white font-bold text-sm px-6 py-3 rounded-xl btn-glow hover:opacity-90 transition">Browse Products</button>
+        <button id="hero-btn-plus" onclick="switchTab('plus')" class="bg-card border border-card text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-gray-800 transition">Get PS Plus</button>
+      </div>
+    </section>
 
-  <!-- Search & Tags & Tabs -->
-  <section class="p-4 max-w-xl mx-auto relative z-10 w-full">
-    <div class="relative mb-3">
-      <i data-lucide="search" class="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400"></i>
-      <input type="text" id="search-input" oninput="resetPagination(); renderProducts();" placeholder="Search game or subscription..." class="w-full bg-card border border-card rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-red-500 transition">
-    </div>
+    <!-- Search & Tags & Tabs -->
+    <section class="p-4 max-w-xl mx-auto relative z-10 w-full">
+      <div class="relative mb-3">
+        <i data-lucide="search" class="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400"></i>
+        <input type="text" id="search-input" oninput="resetPagination(); renderProducts();" placeholder="Search game or subscription..." class="w-full bg-card border border-card rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-red-500 transition">
+      </div>
 
-    <!-- Quick Search Tags -->
-    <div class="flex gap-2 overflow-x-auto pb-2 mb-3 no-scrollbar text-xs">
-      <button onclick="setSearchTag('FC')" class="bg-card border border-card hover:border-red-500/50 text-gray-300 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">#FC27</button>
-      <button onclick="setSearchTag('GTA')" class="bg-card border border-card hover:border-red-500/50 text-gray-300 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">#GTA VI</button>
-      <button onclick="setSearchTag('Spider-Man')" class="bg-card border border-card hover:border-red-500/50 text-gray-300 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">#Spider-Man</button>
-      <button onclick="setSearchTag('Plus')" class="bg-card border border-card hover:border-red-500/50 text-gray-300 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">#PS Plus</button>
-      <button onclick="setSearchTag('Elden')" class="bg-card border border-card hover:border-red-500/50 text-gray-300 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">#Elden Ring</button>
-    </div>
+      <!-- Quick Search Tags (Dynamic) -->
+      <div id="quick-tags-container" class="flex gap-2 overflow-x-auto pb-2 mb-3 no-scrollbar text-xs">
+        <!-- Populated dynamically -->
+      </div>
 
-    <!-- Dynamic Tabs Container -->
-    <div id="tabs-wrapper" class="grid grid-cols-2 gap-2 p-1.5 bg-card rounded-2xl border border-card mb-4 transition-all">
-      <button id="tab-games" onclick="switchTab('games')" class="py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 bg-accent-red text-white btn-glow transition">
-        <i data-lucide="gamepad-2" class="w-4 h-4"></i> PlayStation Games
+      <!-- Dynamic Tabs Container -->
+      <div id="tabs-wrapper" class="grid grid-cols-2 gap-2 p-1.5 bg-card rounded-2xl border border-card mb-4 transition-all">
+        <button id="tab-games" onclick="switchTab('games')" class="py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 bg-accent-red text-white btn-glow transition">
+          <i data-lucide="gamepad-2" class="w-4 h-4"></i> PlayStation Games
+        </button>
+        <button id="tab-plus" onclick="switchTab('plus')" class="py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 text-gray-400 hover:text-white transition">
+          <i data-lucide="star" class="w-4 h-4"></i> PlayStation Plus
+        </button>
+      </div>
+
+      <!-- Platform Filter Pills -->
+      <div id="platform-filters" class="flex gap-2 justify-center items-center pb-1 overflow-x-auto">
+        <button onclick="setPlatformFilter('all')" id="filter-all" class="px-4 py-2 rounded-xl text-xs font-bold bg-accent-red text-white border border-red-500 transition whitespace-nowrap">All Platforms</button>
+        <button onclick="setPlatformFilter('ps5')" id="filter-ps5" class="px-4 py-2 rounded-xl text-xs font-bold bg-card text-gray-300 border border-card hover:border-gray-600 transition whitespace-nowrap">PS5 Only</button>
+        <button onclick="setPlatformFilter('ps4')" id="filter-ps4" class="px-4 py-2 rounded-xl text-xs font-bold bg-card text-gray-300 border border-card hover:border-gray-600 transition whitespace-nowrap">PS4 Only</button>
+      </div>
+    </section>
+
+    <!-- Products Grid -->
+    <main id="products-container" class="p-4 max-w-xl mx-auto grid gap-5 relative z-10 w-full">
+    </main>
+
+    <!-- Load More Button Container -->
+    <div id="load-more-container" class="p-4 max-w-xl mx-auto w-full text-center hidden relative z-10">
+      <button onclick="loadMoreProducts()" class="w-full bg-card hover:bg-gray-800 border border-card text-gray-200 font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 transition shadow-md">
+        <i data-lucide="chevron-down" class="w-4 h-4 text-accent-red"></i>
+        <span>Load More / عرض المزيد</span>
       </button>
-      <button id="tab-plus" onclick="switchTab('plus')" class="py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 text-gray-400 hover:text-white transition">
-        <i data-lucide="star" class="w-4 h-4"></i> PlayStation Plus
-      </button>
     </div>
 
-    <!-- Platform Filter Pills -->
-    <div id="platform-filters" class="flex gap-2 justify-center items-center pb-1 overflow-x-auto">
-      <button onclick="setPlatformFilter('all')" id="filter-all" class="px-4 py-2 rounded-xl text-xs font-bold bg-accent-red text-white border border-red-500 transition whitespace-nowrap">All Platforms</button>
-      <button onclick="setPlatformFilter('ps5')" id="filter-ps5" class="px-4 py-2 rounded-xl text-xs font-bold bg-card text-gray-300 border border-card hover:border-gray-600 transition whitespace-nowrap">PS5 Only</button>
-      <button onclick="setPlatformFilter('ps4')" id="filter-ps4" class="px-4 py-2 rounded-xl text-xs font-bold bg-card text-gray-300 border border-card hover:border-gray-600 transition whitespace-nowrap">PS4 Only</button>
-    </div>
-  </section>
+    <!-- Customer Reviews Section -->
+    <section class="p-4 max-w-xl mx-auto my-8 relative z-10 w-full">
+      <div class="text-center mb-6">
+        <h3 class="text-xl font-black tracking-tight mb-1">What Our Customers <span class="accent-red">Say</span></h3>
+        <p class="text-xs text-gray-400">Trusted by hundreds of gamers across Egypt</p>
+      </div>
 
-  <!-- Products Grid -->
-  <main id="products-container" class="p-4 max-w-xl mx-auto grid gap-5 relative z-10 w-full">
-  </main>
+      <div class="grid gap-4">
+        <div class="bg-card border border-card rounded-2xl p-4 card-glow">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-red-500/10 text-accent-red font-bold flex items-center justify-center text-xs border border-red-500/20">K</div>
+              <div>
+                <h4 class="font-bold text-xs">Karim Mohamed</h4>
+                <p class="text-[10px] text-gray-500">Verified Buyer</p>
+              </div>
+            </div>
+            <div class="flex text-yellow-500 gap-0.5">
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+            </div>
+          </div>
+          <p class="text-xs text-gray-300 leading-relaxed">
+            "أسرع ستور تعاملت معه والله! طلبت اللعبة وخلال دقايق الحساب كان معايا شغال وزي الفل، والأسعار مقارنة بغيرهم ممتازة جداً."
+          </p>
+        </div>
 
-  <!-- Load More Button Container -->
-  <div id="load-more-container" class="p-4 max-w-xl mx-auto w-full text-center hidden relative z-10">
-    <button onclick="loadMoreProducts()" class="w-full bg-card hover:bg-gray-800 border border-card text-gray-200 font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 transition shadow-md">
-      <i data-lucide="chevron-down" class="w-4 h-4 text-accent-red"></i>
-      <span>Load More / عرض المزيد</span>
-    </button>
+        <div class="bg-card border border-card rounded-2xl p-4 card-glow">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-red-500/10 text-accent-red font-bold flex items-center justify-center text-xs border border-red-500/20">A</div>
+              <div>
+                <h4 class="font-bold text-xs">Ahmed Khaled</h4>
+                <p class="text-[10px] text-gray-500">Verified Buyer</p>
+              </div>
+            </div>
+            <div class="flex text-yellow-500 gap-0.5">
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+            </div>
+          </div>
+          <p class="text-xs text-gray-300 leading-relaxed">
+            "الخدمة فظيعة والرد على الواتساب سريع جداً. اشتريت اشتراك بلس من الستور والدعم فضل ماشي معايا خطوة بخطوة لحد ما كل حاجة اشتغلت."
+          </p>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <!-- Customer Reviews Section -->
-  <section class="p-4 max-w-xl mx-auto my-8 relative z-10 w-full">
-    <div class="text-center mb-6">
-      <h3 class="text-xl font-black tracking-tight mb-1">What Our Customers <span class="accent-red">Say</span></h3>
-      <p class="text-xs text-gray-400">Trusted by hundreds of gamers across Egypt</p>
-    </div>
-
-    <div class="grid gap-4">
-      <div class="bg-card border border-card rounded-2xl p-4 card-glow">
-        <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-red-500/10 text-accent-red font-bold flex items-center justify-center text-xs border border-red-500/20">K</div>
-            <div>
-              <h4 class="font-bold text-xs">Karim Mohamed</h4>
-              <p class="text-[10px] text-gray-500">Verified Buyer</p>
-            </div>
-          </div>
-          <div class="flex text-yellow-500 gap-0.5">
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-          </div>
-        </div>
-        <p class="text-xs text-gray-300 leading-relaxed">
-          "أسرع ستور تعاملت معه والله! طلبت اللعبة وخلال دقايق الحساب كان معايا شغال وزي الفل، والأسعار مقارنة بغيرهم ممتازة جداً."
-        </p>
-      </div>
-
-      <div class="bg-card border border-card rounded-2xl p-4 card-glow">
-        <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-red-500/10 text-accent-red font-bold flex items-center justify-center text-xs border border-red-500/20">A</div>
-            <div>
-              <h4 class="font-bold text-xs">Ahmed Khaled</h4>
-              <p class="text-[10px] text-gray-500">Verified Buyer</p>
-            </div>
-          </div>
-          <div class="flex text-yellow-500 gap-0.5">
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
-          </div>
-        </div>
-        <p class="text-xs text-gray-300 leading-relaxed">
-          "الخدمة فظيعة والرد على الواتساب سريع جداً. اشتريت اشتراك بلس من الستور والدعم فضل ماشي معايا خطوة بخطوة لحد ما كل حاجة اشتغلت."
-        </p>
-      </div>
-    </div>
-  </section>
+  <!-- PRODUCT DETAILS PAGE VIEW (Hidden by default) -->
+  <div id="details-view" class="hidden p-4 max-w-xl mx-auto relative z-10 w-full space-y-5">
+    <button onclick="goHome()" class="inline-flex items-center gap-2 bg-card border border-card hover:border-red-500/50 px-4 py-2.5 rounded-xl text-xs font-bold text-gray-300 transition shadow-md">
+      <i data-lucide="arrow-left" class="w-4 h-4 text-accent-red"></i> Back to Store / العودة للمتجر
+    </button>
+    <div id="details-content" class="space-y-5"></div>
+  </div>
 
   <!-- Footer -->
   <footer class="mt-auto py-8 px-4 text-center border-t border-card text-xs text-gray-500 relative z-10 space-y-3">
@@ -311,7 +318,11 @@
         platform: "both",
         subtitle: "Full Digital Copy - Standard Edition",
         badge: "Game",
-        image: "https://i.ibb.co/dw1s0Zzt/IMG-7860.jpg", 
+        image: "https://i.ibb.co/dw1s0Zzt/IMG-7860.jpg",
+        trailer: "https://www.youtube.com/embed/MOclJJ7IpSY",
+        features: ["Advanced HyperMotion AI", "Ultimate Team & Career Mode", "Immersive Matchday Audio", "Full Cross-Play Support"],
+        storyEn: "EA Sports FC 27 delivers the pinnacle of authentic football gaming with advanced AI defending, reworked crossing and headers, immersive career modes, and Football Ultimate Team. Experience next-level matchday realism with precise passing controls and refined player movement.",
+        storyAr: "لعبة EA Sports FC 27 تقدم التجربة الكروية الأقوى والأكثر واقعية مع تحسينات جبارة في الدفاع الذكي، الركلات الركنية والعرضيات، أطوار المهنة وUltimate Team، لتستمتع بأجواء كرة القدم الحقيقية على بلايستيشن.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 1800, oldPriceEGP: 3200 },
           { id: "primary_ps4", name: "Primary PS4", priceEGP: 750, oldPriceEGP: 1500 },
@@ -326,6 +337,10 @@
         subtitle: "Full Digital Copy - PS5",
         badge: "Game",
         image: "https://i.ibb.co/ZzKSVYtW/IMG-7861.jpg",
+        trailer: "https://www.youtube.com/embed/QdBZY2fkU-0",
+        features: ["Massive Open World (Vice City)", "Next-Gen Graphics & Physics", "Immersive Story & Characters", "Online Multiplayer Evolution"],
+        storyEn: "Grand Theft Auto VI heads back to the state of Leonida, home to the neon-soaked streets of Vice City and beyond, in the biggest, most immersive evolution of the open-world Grand Theft Auto series yet.",
+        storyAr: "تدور أحداث لعبة Grand Theft Auto VI في ولاية ليونيدا الشهيرة التي تضم شوارع وسايس سيتي المضيئة، لتمنح اللاعبين أضخم وأكثر تجربة عالم مفتوح تطوراً وإثارة في تاريخ السلسلة.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 2400, oldPriceEGP: 4000 },
           { id: "secondary", name: "Secondary", priceEGP: 1500, oldPriceEGP: 2800 }
@@ -338,7 +353,11 @@
         platform: "ps5",
         subtitle: "Full Digital Copy - PS5",
         badge: "Game",
-        image: "https://i.imgur.com/9l8xY8Z.jpg",
+        image: "https://i.ibb.co/21fS6xzR/IMG-7873.png",
+        trailer: "https://www.youtube.com/embed/rJrqHyojaa4",
+        features: ["Brutal Combat & Adamantium Claws", "Emotional Original Storyline", "Stunning PS5 Visuals & Performance", "Intense Action Sequences"],
+        storyEn: "An emotionally charged original story centered on James 'Logan' Howlett, aka Wolverine. Teaming up with Jean Grey against the cybernetic militia known as the Reavers and billionaire industrialist Bolivar Trask in a brutal, action-packed single-player adventure.",
+        storyAr: "قصة مشحونة بالعاطفة والحماس تدور حول بطلنا جيمس 'لوجان' أو المعروف بـ Wolverine. يخوض مغامرة فردية عنيفة وملحمية ضد ميليشيا Reavers ورجل الأعمال بوليفار تراسك بجانب جين جراي.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 2050, oldPriceEGP: 3500 },
           { id: "secondary", name: "Secondary", priceEGP: 1550, oldPriceEGP: 2700 }
@@ -352,6 +371,10 @@
         subtitle: "Full Digital Copy - PS4 / PS5",
         badge: "Game",
         image: "https://i.ibb.co/5hgQLTJ5/IMG-7862.jpg",
+        trailer: "https://www.youtube.com/embed/QkkoHAzjnUs",
+        features: ["Switch Between 3 Characters", "Grand Heist Missions", "GTA Online Included", "Stunning Open World Los Santos"],
+        storyEn: "When a young street hustler, a retired bank robber and a terrifying psychopath find themselves entangled with some of the most frightening and deranged elements of the criminal underworld, they must pull off a series of dangerous heists.",
+        storyAr: "عندما يجد لص شوارع شاب ومصرفي محترف ومتخلى عن الإجرام ومريض نفسي خطير أنفسهم متورطين مع أخطر عصابات العالم السفلي، عليهم تنفيذ سلسلة من السرقات المخيفة للبقاء على قيد الحياة.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 600, oldPriceEGP: 1200 },
           { id: "primary_ps4", name: "Primary PS4", priceEGP: 450, oldPriceEGP: 950 },
@@ -365,7 +388,11 @@
         platform: "both",
         subtitle: "Full Digital Copy - PS4 / PS5",
         badge: "Game",
-        image: "https://i.imgur.com/vH0M123.jpg",
+        image: "https://i.ibb.co/mryMzcVL/IMG-7876.jpg",
+        trailer: "https://www.youtube.com/embed/on1E0EHLyik",
+        features: ["Cinematic Cold War Campaign", "Signature Round-Based Zombies", "Dynamic Multiplayer Action", "Omnimovement System"],
+        storyEn: "Black Ops 6 is a spy action thriller set in the early 1990s, a period of transition and upheaval in global politics, characterized by the end of the Cold War and the rise of the United States as a single superpower.",
+        storyAr: "لعبة إثارة وتجسس عالمية تدور أحداثها في أوائل التسعينيات، وهي فترة تحولات كبرى في السياسة العالمية عقب نهاية الحرب الباردة وصعود الولايات المتحدة كقوة عظمى.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 1000, oldPriceEGP: 2200 },
           { id: "primary_ps4", name: "Primary PS4", priceEGP: 650, oldPriceEGP: 1400 },
@@ -379,7 +406,11 @@
         platform: "ps5",
         subtitle: "Full Digital Copy - PS5",
         badge: "Game",
-        image: "https://i.imgur.com/83p1O9L.jpg",
+        image: "https://i.ibb.co/gLbxTMpP/IMG-7877.webp",
+        trailer: "https://www.youtube.com/embed/nq1M_Wc4FIc",
+        features: ["Play as Both Peter & Miles", "Web-Wings Fast Traversal", "Symbiote Powers & Venom", "Expansive New NYC Boroughs"],
+        storyEn: "Spider-Men Peter Parker and Miles Morales face the ultimate test of strength as they fight to save the city, each other and the ones they love from the monstrous Venom and the dangerous new symbiote threat.",
+        storyAr: "يواجه بيتر باركر وميلز موراليس اختباراً حاسماً لقواهما وهما يقاتلان لإنقاذ المدينة ومن يحبونهم من وحشية فينوهم وتهديد السيمبيوت المرعب.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 1350, oldPriceEGP: 2600 },
           { id: "secondary", name: "Secondary", priceEGP: 975, oldPriceEGP: 1900 }
@@ -392,7 +423,11 @@
         platform: "both",
         subtitle: "Full Digital Copy - PS4 / PS5",
         badge: "Game",
-        image: "https://i.imgur.com/J4r1p90.jpg",
+        image: "https://i.ibb.co/V02QVnTX/IMG-7878.jpg",
+        trailer: "https://www.youtube.com/embed/E3Huy2cdih0",
+        features: ["Vast Open World Exploration", "Deep RPG Character Builds", "Challenging Boss Battles", "Mounted Combat & Magic"],
+        storyEn: "Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between, crafted by FromSoftware and George R.R. Martin.",
+        storyAr: "انهض أيها الـ Tarnished واسترشد بالنعمة لتمتلك قوة الـ Elden Ring وتصبح ملكاً في الأراضي الوسطى، في ملحمة صممها استوديو FromSoftware بالتعاون مع جورج مارتن.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 1200, oldPriceEGP: 2400 },
           { id: "primary_ps4", name: "Primary PS4", priceEGP: 750, oldPriceEGP: 1600 },
@@ -406,7 +441,11 @@
         platform: "ps5",
         subtitle: "Full Digital Copy - PS5",
         badge: "Game",
-        image: "https://i.imgur.com/Y6K5Q8P.jpg",
+        image: "https://i.ibb.co/C5nyGkJ9/IMG-7879.jpg",
+        trailer: "https://www.youtube.com/embed/pnSsgRJmsCc",
+        features: ["Unreal Engine 5 Graphics", "Mythical Transformations", "Fluid Staff Combat", "Epic Boss Encounters"],
+        storyEn: "An action RPG rooted in Chinese mythology and based on Journey to the West. You set out as the Destined One to venture into challenges and uncover the obscured truth beneath a glorious legend.",
+        storyAr: "لعبة تقمص أدوار مستوحاة من الأساطير الصينية ورواية رحلة إلى الغربية الشهيرة. تلعب دور 'المختار' لتخوض تحديات مذهلة وتكشف الحقيقة وراء أسطورة قديمة.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 2300, oldPriceEGP: 3800 },
           { id: "secondary", name: "Secondary", priceEGP: 1600, oldPriceEGP: 2900 }
@@ -419,7 +458,11 @@
         platform: "ps5",
         subtitle: "Full Digital Copy - PS5",
         badge: "Game",
-        image: "https://i.imgur.com/B7V3X1Y.jpg",
+        image: "https://i.ibb.co/3mM0Rj6H/IMG-7874.jpg",
+        trailer: "https://www.youtube.com/embed/vovkzbtYBC8",
+        features: ["Dual Protagonists (Shinobi & Samurai)", "Dynamic Seasons & Weather", "Feudal Japan Open World", "Stealth & Brutal Combat"],
+        storyEn: "Experience the intertwined stories of Naoe, an adept shinobi Assassin, and Yasuke, the powerful African samurai, amidst the turbulent late Sengoku period in feudal Japan.",
+        storyAr: "عش القصة المترابطة لناوي، النينجا الماهرة، وياسوك، الساموراي الأفريقي القوي، خلال فترة سينغوكو المضطربة في اليابان الإقطاعية.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 1300, oldPriceEGP: 2500 },
           { id: "secondary", name: "Secondary", priceEGP: 1000, oldPriceEGP: 1900 }
@@ -432,22 +475,63 @@
         platform: "ps5",
         subtitle: "Full Digital Copy - PS5",
         badge: "Game",
-        image: "https://i.imgur.com/L2K8P4Q.jpg",
+        image: "https://i.ibb.co/VWhdzGJF/IMG-7875.jpg",
+        trailer: "https://www.youtube.com/embed/nTUoIyTMw0Q",
+        features: ["High-Stakes Espionage", "Stealth Infiltration Missions", "Cinematic Action Sequences", "State-of-the-art Gadgets"],
+        storyEn: "Step into the world of espionage and tactical missions as James Bond in 007 First Light, featuring high-stakes action, undercover infiltration, and thrilling cinematic sequences.",
+        storyAr: "ادخل عالم التجسس والمهام التكتيكية بصفتك جيمس بوند، مع أحداث مشوقة، تسلل سري، ومشاهد سينمائية مذهلة.",
         options: [
           { id: "primary_ps5", name: "Primary PS5", priceEGP: 1800, oldPriceEGP: 3000 },
           { id: "secondary", name: "Secondary", priceEGP: 1300, oldPriceEGP: 2200 }
         ]
       },
+      // PS Plus Essential Subscriptions
       {
-        id: "ps_plus_extra",
-        title: "PS Plus Extra - 1 Year",
+        id: "ps_plus_essential_12m",
+        title: "PS Plus Essential (12 Months)",
         category: "plus",
         platform: "both",
-        subtitle: "Subscription - Official Account",
+        subtitle: "Official 12 Months Subscription",
         badge: "Subscription",
-        image: "https://i.imgur.com/83p1O9L.jpg",
+        image: "https://i.ibb.co/cXSp4F6C/IMG-7882.jpg",
+        features: ["Online Multiplayer Access", "Monthly Free Games", "Exclusive Store Discounts", "Cloud Storage Support"],
+        storyEn: "Get 12 full months of PlayStation Plus Essential benefits: online multiplayer access, monthly free games, exclusive store discounts, and cloud storage.",
+        storyAr: "احصل على اشتراك بلس إسينشال لمدة 12 شهراً كاملة: اللعب أونلاين مع أصدقائك، الألعاب المجانية الشهرية، خصومات حصرية، وتخزين سحابي.",
         options: [
-          { id: "primary_ps5", name: "Account Activation", priceEGP: 1450, oldPriceEGP: 2800 }
+          { id: "primary_ps5", name: "Primary PS5", priceEGP: 1950, oldPriceEGP: 3200 },
+          { id: "primary_ps4", name: "Primary PS4", priceEGP: 650, oldPriceEGP: 1300 }
+        ]
+      },
+      {
+        id: "ps_plus_essential_3m",
+        title: "PS Plus Essential (3 Months)",
+        category: "plus",
+        platform: "both",
+        subtitle: "Official 3 Months Subscription",
+        badge: "Subscription",
+        image: "https://i.ibb.co/mrmZxNWv/IMG-7881.webp",
+        features: ["Online Multiplayer Access", "Monthly Free Games Lineup", "Exclusive Store Discounts", "Cloud Storage Support"],
+        storyEn: "Enjoy 3 months of PlayStation Plus Essential features including online multiplayer, monthly games lineup, and subscriber discounts.",
+        storyAr: "استمتع بـ 3 أشهر من مزايا بلس إسينشال التي تشمل اللعب الجماعي أونلاين، مكتبة الألعاب الشهرية، والخصومات الخاصة.",
+        options: [
+          { id: "primary_ps5", name: "Primary PS5", priceEGP: 900, oldPriceEGP: 1600 },
+          { id: "primary_ps4", name: "Primary PS4", priceEGP: 355, oldPriceEGP: 700 }
+        ]
+      },
+      {
+        id: "ps_plus_essential_1m",
+        title: "PS Plus Essential (1 Month)",
+        category: "plus",
+        platform: "both",
+        subtitle: "Official 1 Month Subscription",
+        badge: "Subscription",
+        image: "https://i.ibb.co/bMt4mkqY/IMG-7880.jpg",
+        features: ["Online Multiplayer Access", "Monthly Free Games", "Exclusive Store Discounts", "Cloud Storage Support"],
+        storyEn: "Get a 1-month PlayStation Plus Essential subscription for instant access to online multiplayer and monthly titles.",
+        storyAr: "احصل على اشتراك بلس إسينشال لمدة شهر واحد لتفعيل اللعب الجماعي الفوري والتمتع بالألعاب الشهرية.",
+        options: [
+          { id: "primary_ps5", name: "Primary PS5", priceEGP: 450, oldPriceEGP: 850 },
+          { id: "primary_ps4", name: "Primary PS4", priceEGP: 200, oldPriceEGP: 400 }
         ]
       }
     ];
@@ -506,27 +590,58 @@
     function switchTab(tab) {
       currentTab = tab;
       resetPagination();
-      const gamesBtn = document.getElementById('tab-games');
-      const plusBtn = document.getElementById('tab-plus');
-      const tabsWrapper = document.getElementById('tabs-wrapper');
+      
+      const gamesTabBtn = document.getElementById('tab-games');
+      const plusTabBtn = document.getElementById('tab-plus');
+      const heroGamesBtn = document.getElementById('hero-btn-games');
+      const heroPlusBtn = document.getElementById('hero-btn-plus');
       const platformFilters = document.getElementById('platform-filters');
 
       if (tab === 'games') {
-        tabsWrapper.className = "grid grid-cols-1 gap-2 p-1.5 bg-card rounded-2xl border border-card mb-4 transition-all";
-        gamesBtn.style.display = 'flex';
-        plusBtn.style.display = 'none';
+        gamesTabBtn.className = "py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 bg-accent-red text-white btn-glow transition";
+        plusTabBtn.className = "py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 text-gray-400 hover:text-white transition";
+        
+        heroGamesBtn.className = "bg-accent-red text-white font-bold text-sm px-6 py-3 rounded-xl btn-glow hover:opacity-90 transition";
+        heroPlusBtn.className = "bg-card border border-card text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-gray-800 transition";
 
-        gamesBtn.className = "py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 bg-accent-red text-white btn-glow transition";
         platformFilters.style.display = 'flex';
       } else {
-        tabsWrapper.className = "grid grid-cols-1 gap-2 p-1.5 bg-card rounded-2xl border border-card mb-4 transition-all";
-        gamesBtn.style.display = 'none';
-        plusBtn.style.display = 'flex';
+        plusTabBtn.className = "py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 bg-accent-red text-white btn-glow transition";
+        gamesTabBtn.className = "py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 text-gray-400 hover:text-white transition";
+        
+        heroPlusBtn.className = "bg-accent-red text-white font-bold text-sm px-6 py-3 rounded-xl btn-glow hover:opacity-90 transition";
+        heroGamesBtn.className = "bg-card border border-card text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-gray-800 transition";
 
-        plusBtn.className = "py-3 text-sm font-bold rounded-xl flex items-center justify-center gap-2 bg-accent-red text-white btn-glow transition";
         platformFilters.style.display = 'none';
       }
+
+      renderQuickTags();
       renderProducts();
+    }
+
+    function renderQuickTags() {
+      const container = document.getElementById('quick-tags-container');
+      container.innerHTML = '';
+
+      if (currentTab === 'games') {
+        const gameTags = ['FC', 'GTA', 'Spider-Man', 'Elden', 'Wolverine', 'COD'];
+        gameTags.forEach(tag => {
+          const btn = document.createElement('button');
+          btn.onclick = () => setSearchTag(tag);
+          btn.className = "bg-card border border-card hover:border-red-500/50 text-gray-300 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition";
+          btn.innerText = `#${tag}`;
+          container.appendChild(btn);
+        });
+      } else {
+        const plusTags = ['Essential', '12 Months', '3 Months', '1 Month'];
+        plusTags.forEach(tag => {
+          const btn = document.createElement('button');
+          btn.onclick = () => setSearchTag(tag);
+          btn.className = "bg-card border border-card hover:border-red-500/50 text-gray-300 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition";
+          btn.innerText = `#${tag}`;
+          container.appendChild(btn);
+        });
+      }
     }
 
     function setPlatformFilter(platform) {
@@ -548,6 +663,14 @@
       if (product) {
         selectedOptions[productId] = product.options[optionIndex];
         renderProducts();
+      }
+    }
+
+    function selectDetailOption(productId, optionIndex) {
+      const product = productsData.find(p => p.id === productId);
+      if (product) {
+        selectedOptions[productId] = product.options[optionIndex];
+        openDetails(productId);
       }
     }
 
@@ -602,7 +725,7 @@
         card.className = "card-glow rounded-2xl p-4 flex flex-col justify-between";
         card.innerHTML = `
           <div>
-            <div class="game-banner h-48 rounded-xl mb-3 relative overflow-hidden flex items-center justify-center bg-gray-900">
+            <div class="game-banner h-48 rounded-xl mb-3 relative overflow-hidden flex items-center justify-center bg-gray-900 cursor-pointer" onclick="openDetails('${product.id}')">
               <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x250/111/fff?text=${encodeURIComponent(product.title)}';">
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10"></div>
               <span class="absolute top-2 left-2 text-[10px] font-bold bg-black/70 backdrop-blur-md border border-card px-2.5 py-0.5 rounded-full text-gray-300">
@@ -610,11 +733,11 @@
               </span>
             </div>
 
-            <h3 class="font-bold text-lg">${product.title}</h3>
+            <h3 class="font-bold text-lg cursor-pointer hover:text-red-500 transition" onclick="openDetails('${product.id}')">${product.title}</h3>
             <p class="text-xs text-gray-400 mb-2">${product.subtitle}</p>
 
-            <!-- Price Comparison Section with PlayStation Store Branding -->
-            <div class="flex items-center gap-2 mb-4 bg-black/30 px-3 py-2.5 rounded-xl border border-card">
+            <!-- Price Comparison Section -->
+            <div class="flex items-center gap-2 mb-3 bg-black/30 px-3 py-2.5 rounded-xl border border-card">
               <div class="flex items-center gap-1.5 text-gray-400 text-xs font-medium">
                 <i data-lucide="gamepad-2" class="w-3.5 h-3.5 text-blue-400"></i>
                 <span>PS Store Price:</span>
@@ -628,9 +751,14 @@
             <div class="flex gap-2 mb-3">
               ${optionsHTML}
             </div>
-            <button onclick="addToCart('${product.id}')" class="w-full bg-accent-red hover:opacity-90 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 btn-glow transition">
-              <i data-lucide="shopping-cart" class="w-4 h-4"></i> Add to Cart
-            </button>
+            <div class="flex gap-2">
+              <button onclick="openDetails('${product.id}')" class="flex-1 bg-card hover:bg-gray-800 border border-card text-gray-200 font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="info" class="w-4 h-4 text-accent-red"></i> Details
+              </button>
+              <button onclick="addToCartFromMain('${product.id}')" class="flex-[2] bg-accent-red hover:opacity-90 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-1.5 btn-glow transition">
+                <i data-lucide="shopping-cart" class="w-4 h-4"></i> Add to Cart
+              </button>
+            </div>
           </div>
         `;
         container.appendChild(card);
@@ -645,17 +773,221 @@
       lucide.createIcons();
     }
 
+    function openDetails(productId) {
+      const product = productsData.find(p => p.id === productId);
+      if (!product) return;
+
+      if (!selectedOptions[product.id]) {
+        selectedOptions[product.id] = product.options[0];
+      }
+      const currentSelected = selectedOptions[product.id];
+
+      let optionsHTML = product.options.map((opt, idx) => {
+        const isSelected = currentSelected.id === opt.id;
+        return `
+          <button onclick="selectDetailOption('${product.id}', ${idx})" class="flex-1 py-2.5 px-2 rounded-xl text-xs font-bold border transition flex flex-col items-center justify-center ${
+            isSelected ? 'bg-accent-red text-white border-red-500 btn-glow' : 'bg-black/40 text-gray-300 border-card hover:border-gray-600'
+          }">
+            <span class="truncate w-full text-center">${opt.name}</span>
+            <span class="mt-0.5 text-[10px] opacity-90">${formatPrice(opt.priceEGP)}</span>
+          </button>
+        `;
+      }).join('');
+
+      let featuresHTML = product.features.map(feat => `
+        <li class="flex items-center gap-2 text-xs text-gray-300">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-accent-red shrink-0"></i>
+          <span>${feat}</span>
+        </li>
+      `).join('');
+
+      // Related Items (Games or Subscriptions based on current product type)
+      let relatedHTML = '';
+      if (product.category === 'games') {
+        const relatedProducts = productsData.filter(p => p.category === 'games' && p.id !== product.id).slice(0, 2);
+        relatedHTML = `
+          <div class="border-t border-card pt-5 space-y-3">
+            <h3 class="font-bold text-xs text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-4 h-4 text-accent-red"></i> You Might Also Like / ألعاب مقترحة لك
+            </h3>
+            <div class="grid grid-cols-2 gap-3">
+              ${relatedProducts.map(rel => `
+                <div onclick="openDetails('${rel.id}')" class="bg-black/40 border border-card hover:border-red-500/50 p-3 rounded-xl cursor-pointer transition flex items-center gap-3">
+                  <img src="${rel.image}" alt="${rel.title}" class="w-12 h-12 rounded-lg object-cover border border-card">
+                  <div class="min-w-0 flex-1">
+                    <h5 class="font-bold text-xs truncate">${rel.title}</h5>
+                    <p class="text-[10px] text-accent-red font-semibold">${formatPrice(rel.options[0].priceEGP)}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        const relatedSubs = productsData.filter(p => p.category === 'plus' && p.id !== product.id);
+        relatedHTML = `
+          <div class="border-t border-card pt-5 space-y-3">
+            <h3 class="font-bold text-xs text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-4 h-4 text-accent-red"></i> Recommended Subscriptions / اشتراكات مقترحة لك
+            </h3>
+            <div class="grid grid-cols-2 gap-3">
+              ${relatedSubs.map(rel => `
+                <div onclick="openDetails('${rel.id}')" class="bg-black/40 border border-card hover:border-red-500/50 p-3 rounded-xl cursor-pointer transition flex items-center gap-3">
+                  <img src="${rel.image}" alt="${rel.title}" class="w-12 h-12 rounded-lg object-cover border border-card">
+                  <div class="min-w-0 flex-1">
+                    <h5 class="font-bold text-xs truncate">${rel.title}</h5>
+                    <p class="text-[10px] text-accent-red font-semibold">${formatPrice(rel.options[0].priceEGP)}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      const detailsContent = document.getElementById('details-content');
+      detailsContent.innerHTML = `
+        <div class="card-glow rounded-2xl p-5 space-y-5">
+          <!-- Game Banner Image -->
+          <div class="game-banner h-64 rounded-xl relative overflow-hidden flex items-center justify-center bg-gray-900">
+            <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://via.placeholder.com/600x350/111/fff?text=${encodeURIComponent(product.title)}';">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10"></div>
+            <span class="absolute top-3 left-3 text-xs font-bold bg-black/70 backdrop-blur-md border border-card px-3 py-1 rounded-full text-gray-300">
+              ${product.badge}
+            </span>
+          </div>
+
+          <div>
+            <h2 class="text-2xl font-black mb-1">${product.title}</h2>
+            <p class="text-sm text-gray-400">${product.subtitle}</p>
+          </div>
+
+          <!-- Trailer Video Section (Only shown for games) -->
+          ${product.trailer ? `
+            <div class="space-y-2">
+              <h3 class="font-bold text-xs text-gray-400 flex items-center gap-1.5 uppercase tracking-wider">
+                <i data-lucide="play-circle" class="w-4 h-4 text-accent-red"></i> Official Gameplay Trailer / عرض الفيديو
+              </h3>
+              <div class="relative w-full aspect-video rounded-xl overflow-hidden border border-card bg-black">
+                <iframe src="${product.trailer}" class="w-full h-full border-0" allowfullscreen></iframe>
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Price Box -->
+          <div class="flex items-center gap-3 bg-black/40 p-4 rounded-xl border border-card">
+            <div class="flex items-center gap-2 text-gray-400 text-sm font-medium">
+              <i data-lucide="gamepad-2" class="w-4 h-4 text-blue-400"></i>
+              <span>PS Store Price:</span>
+            </div>
+            <span class="text-sm text-gray-500 line-through">${formatPrice(currentSelected.oldPriceEGP)}</span>
+            <span class="text-base font-black text-accent-red mr-auto">${formatPrice(currentSelected.priceEGP)}</span>
+          </div>
+
+          <!-- Options Selector -->
+          <div>
+            <label class="block text-xs text-gray-400 mb-2 font-semibold">Select Edition / Platform:</label>
+            <div class="flex gap-2">
+              ${optionsHTML}
+            </div>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <button onclick="addToCart('${product.id}')" class="w-full bg-accent-red hover:opacity-90 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 btn-glow transition">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i> Add to Cart / إضافة إلى السلة
+          </button>
+
+          <!-- Instant Delivery & Guarantee Badge -->
+          <div class="bg-green-500/10 border border-green-500/20 p-4 rounded-xl flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center shrink-0">
+              <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </div>
+            <div class="text-xs space-y-0.5">
+              <h4 class="font-bold text-green-400">Instant Delivery & Full Guarantee / تسليم فوري وضمان شامل</h4>
+              <p class="text-gray-400">تحصل على تفاصيل الحساب خلال دقائق مع دعم فني متواصل 24/7 عبر الواتساب.</p>
+            </div>
+          </div>
+
+          <!-- Key Features Section -->
+          <div class="bg-black/30 p-4 rounded-xl border border-card space-y-3">
+            <h3 class="font-bold text-xs text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-4 h-4 text-accent-red"></i> Key Features / مميزات اللعبة
+            </h3>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              ${featuresHTML}
+            </ul>
+          </div>
+
+          <!-- Story or Subscription Overview Section -->
+          <div class="border-t border-card pt-5 space-y-4">
+            <h3 class="font-bold text-base text-gray-200 flex items-center gap-2">
+              <i data-lucide="book-open" class="w-4 h-4 text-accent-red"></i> ${product.category === 'games' ? 'Story & Overview / القصة ونظرة عامة' : 'Subscription Details & Benefits / تفاصيل الاشتراك والمميزات'}
+            </h3>
+            
+            <div class="bg-black/30 p-4 rounded-xl border border-card space-y-3 text-xs leading-relaxed text-gray-300">
+              <p class="font-medium"><strong class="text-accent-red">English:</strong> ${product.storyEn}</p>
+              <div class="w-full border-t border-card"></div>
+              <p class="font-medium dir-rtl text-right" dir="rtl"><strong class="text-accent-red">العربية:</strong> ${product.storyAr}</p>
+            </div>
+          </div>
+
+          <!-- Related Products / Subscriptions Section -->
+          ${relatedHTML}
+        </div>
+      `;
+
+      document.getElementById('main-view').classList.add('hidden');
+      document.getElementById('details-view').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    function goHome() {
+      document.getElementById('details-view').classList.add('hidden');
+      document.getElementById('main-view').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function addToCartFromMain(productId) {
+      addToCart(productId);
+    }
+
     function addToCart(productId) {
       const product = productsData.find(p => p.id === productId);
+      if (!selectedOptions[productId]) {
+        selectedOptions[productId] = product.options[0];
+      }
       const option = selectedOptions[productId];
 
-      cart.push({
-        id: Date.now(),
-        title: product.title,
-        optionName: option.name,
-        priceEGP: option.priceEGP
-      });
+      const existingItem = cart.find(item => item.productId === productId && item.optionId === option.id);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({
+          id: Date.now(),
+          productId: product.id,
+          optionId: option.id,
+          title: product.title,
+          image: product.image,
+          optionName: option.name,
+          priceEGP: option.priceEGP,
+          quantity: 1
+        });
+      }
 
+      updateCart();
+      toggleCart();
+    }
+
+    function changeQuantity(cartItemId, delta) {
+      const item = cart.find(i => i.id === cartItemId);
+      if (item) {
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+          cart = cart.filter(i => i.id !== cartItemId);
+        }
+      }
       updateCart();
     }
 
@@ -665,25 +997,46 @@
     }
 
     function updateCart() {
-      document.getElementById('cart-count').innerText = cart.length;
+      const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cart-count').innerText = totalItemsCount;
       const cartItemsContainer = document.getElementById('cart-items');
       cartItemsContainer.innerHTML = '';
 
       let totalEGP = 0;
 
       if (cart.length === 0) {
-        cartItemsContainer.innerHTML = `<p class="text-center text-gray-500 py-8 text-sm">Your cart is currently empty.</p>`;
+        cartItemsContainer.innerHTML = `
+          <div class="flex flex-col items-center justify-center py-20 text-center space-y-3">
+            <div class="w-16 h-16 bg-card border border-card rounded-full flex items-center justify-center text-gray-500 shadow-inner">
+              <i data-lucide="shopping-bag" class="w-8 h-8 text-accent-red opacity-80"></i>
+            </div>
+            <h4 class="font-bold text-base text-gray-300">Your cart is empty</h4>
+            <p class="text-xs text-gray-500 max-w-[220px]">Explore our store and add your favorite games or subscriptions to get started!</p>
+          </div>
+        `;
       } else {
         cart.forEach(item => {
-          totalEGP += item.priceEGP;
+          totalEGP += (item.priceEGP * item.quantity);
           const itemEl = document.createElement('div');
-          itemEl.className = "bg-black/50 border border-card p-3 rounded-xl flex items-center justify-between";
+          itemEl.className = "bg-black/40 border border-card p-3 rounded-2xl flex items-center gap-3 card-glow relative";
           itemEl.innerHTML = `
-            <div>
-              <h4 class="font-bold text-sm">${item.title}</h4>
-              <p class="text-xs text-gray-400">${item.optionName} — <span class="accent-red">${formatPrice(item.priceEGP)}</span></p>
+            <img src="${item.image}" alt="${item.title}" class="w-14 h-14 rounded-xl object-cover border border-card shrink-0" onerror="this.onerror=null; this.src='https://via.placeholder.com/100/111/fff?text=Game';">
+            
+            <div class="flex-1 min-w-0 pr-6">
+              <h4 class="font-bold text-sm truncate">${item.title}</h4>
+              <p class="text-[11px] text-gray-400 mb-2">${item.optionName} — <span class="accent-red font-semibold">${formatPrice(item.priceEGP)}</span></p>
+              
+              <!-- Quantity Controller -->
+              <div class="flex items-center gap-3">
+                <div class="flex items-center bg-card border border-card rounded-lg overflow-hidden">
+                  <button onclick="changeQuantity(${item.id}, -1)" class="px-2 py-1 text-gray-400 hover:text-white hover:bg-gray-800 transition text-xs font-bold">-</button>
+                  <span class="px-3 text-xs font-bold text-white">${item.quantity}</span>
+                  <button onclick="changeQuantity(${item.id}, 1)" class="px-2 py-1 text-gray-400 hover:text-white hover:bg-gray-800 transition text-xs font-bold">+</button>
+                </div>
+              </div>
             </div>
-            <button onclick="removeFromCart(${item.id})" class="text-gray-500 hover:text-red-500 p-1">
+            
+            <button onclick="removeFromCart(${item.id})" class="absolute top-3 right-3 text-gray-500 hover:text-red-500 p-1.5 transition">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           `;
@@ -719,8 +1072,8 @@
       let text = `Hello UNCLE JACK STORE 👋\nI want to order (Currency: ${currentCurrency}):\n\n`;
 
       cart.forEach((item, index) => {
-        text += `${index + 1}. ${item.title} — ${item.optionName} — ${formatPrice(item.priceEGP)}\n`;
-        totalEGP += item.priceEGP;
+        text += `${index + 1}. ${item.title} (${item.optionName}) x${item.quantity} — ${formatPrice(item.priceEGP * item.quantity)}\n`;
+        totalEGP += (item.priceEGP * item.quantity);
       });
 
       text += `\nTotal: ${formatPrice(totalEGP)}`;
@@ -730,7 +1083,9 @@
       window.open(url, '_blank');
     }
 
+    // التشغيل المبدئي
     switchTab('games');
+    updateCart();
   </script>
 </body>
 </html>
