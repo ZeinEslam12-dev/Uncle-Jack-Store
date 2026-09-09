@@ -34,6 +34,9 @@
     .btn-glow {
       box-shadow: 0 0 20px rgba(255, 59, 48, 0.4);
     }
+    .whatsapp-glow {
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
+    }
     .card-glow {
       background-color: #121216;
       border: 1px solid rgba(255, 59, 48, 0.35);
@@ -73,6 +76,9 @@
 </head>
 <body class="pb-24 relative overflow-x-hidden flex flex-col min-h-screen">
 
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-20 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
   <!-- Ticker Marquee Bar -->
   <div class="bg-accent-red text-white text-xs font-bold py-2 overflow-hidden relative z-50 shadow-md">
     <div class="animate-marquee flex items-center">
@@ -110,7 +116,7 @@
         <option value="USD">🇺🇸 USD</option>
       </select>
 
-      <button onclick="toggleCart()" class="relative p-2.5 bg-card rounded-xl border border-card text-white hover:border-red-500 transition flex items-center justify-center">
+      <button id="cart-btn" onclick="toggleCart()" class="relative p-2.5 bg-card rounded-xl border border-card text-white hover:border-red-500 transition flex items-center justify-center">
         <i data-lucide="shopping-cart" class="w-5 h-5 text-accent-red"></i>
         <span id="cart-count" class="absolute -top-1.5 -right-1.5 bg-accent-red text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
       </button>
@@ -257,24 +263,24 @@
     <i data-lucide="message-circle" class="w-6 h-6"></i>
   </a>
 
-  <!-- Cart Modal -->
+  <!-- Cart Modal (Fixed to cover full height and screen) -->
   <div id="cart-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex justify-end">
-    <div class="w-full max-w-md bg-card h-full flex flex-col p-4 shadow-2xl border-l border-card">
-      <div class="flex items-center justify-between pb-4 border-b border-card">
-        <h3 class="font-bold text-lg flex items-center gap-2">
+    <div class="w-full max-w-md bg-card h-full max-h-screen flex flex-col p-5 shadow-2xl border-l border-card">
+      <div class="flex items-center justify-between pb-4 border-b border-card shrink-0">
+        <h3 class="font-black text-lg flex items-center gap-2">
           <i data-lucide="shopping-cart" class="w-5 h-5 text-accent-red"></i> Shopping Cart
         </h3>
-        <button onclick="toggleCart()" class="text-gray-400 hover:text-white p-1"><i data-lucide="x" class="w-6 h-6"></i></button>
+        <button onclick="toggleCart()" class="text-gray-400 hover:text-white p-1 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
       </div>
 
-      <div id="cart-items" class="flex-1 overflow-y-auto py-4 space-y-3"></div>
+      <div id="cart-items" class="flex-1 overflow-y-auto py-4 space-y-3 min-h-0"></div>
 
-      <div class="pt-4 border-t border-card space-y-3">
+      <div class="pt-4 border-t border-card space-y-3 shrink-0">
         <div class="flex justify-between text-base font-bold">
           <span>Total:</span>
           <span id="cart-total" class="accent-red">0 EGP</span>
         </div>
-        <button onclick="showOrderNotice()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition">
+        <button onclick="showOrderNotice()" class="w-full bg-green-600 hover:bg-green-500 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2.5 whatsapp-glow hover:scale-[1.01] transition">
           <i data-lucide="message-circle" class="w-5 h-5"></i> Order via WhatsApp
         </button>
       </div>
@@ -801,7 +807,6 @@
         </li>
       `).join('');
 
-      // Related Items (Games or Subscriptions based on current product type)
       let relatedHTML = '';
       if (product.category === 'games') {
         const relatedProducts = productsData.filter(p => p.category === 'games' && p.id !== product.id).slice(0, 2);
@@ -848,7 +853,6 @@
       const detailsContent = document.getElementById('details-content');
       detailsContent.innerHTML = `
         <div class="card-glow rounded-2xl p-5 space-y-5">
-          <!-- Game Banner Image -->
           <div class="game-banner h-64 rounded-xl relative overflow-hidden flex items-center justify-center bg-gray-900">
             <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://via.placeholder.com/600x350/111/fff?text=${encodeURIComponent(product.title)}';">
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10"></div>
@@ -862,7 +866,6 @@
             <p class="text-sm text-gray-400">${product.subtitle}</p>
           </div>
 
-          <!-- Trailer Video Section (Only shown for games) -->
           ${product.trailer ? `
             <div class="space-y-2">
               <h3 class="font-bold text-xs text-gray-400 flex items-center gap-1.5 uppercase tracking-wider">
@@ -874,7 +877,6 @@
             </div>
           ` : ''}
 
-          <!-- Price Box -->
           <div class="flex items-center gap-3 bg-black/40 p-4 rounded-xl border border-card">
             <div class="flex items-center gap-2 text-gray-400 text-sm font-medium">
               <i data-lucide="gamepad-2" class="w-4 h-4 text-blue-400"></i>
@@ -884,7 +886,6 @@
             <span class="text-base font-black text-accent-red mr-auto">${formatPrice(currentSelected.priceEGP)}</span>
           </div>
 
-          <!-- Options Selector -->
           <div>
             <label class="block text-xs text-gray-400 mb-2 font-semibold">Select Edition / Platform:</label>
             <div class="flex gap-2">
@@ -892,12 +893,10 @@
             </div>
           </div>
 
-          <!-- Add to Cart Button -->
           <button onclick="addToCart('${product.id}')" class="w-full bg-accent-red hover:opacity-90 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 btn-glow transition">
             <i data-lucide="shopping-cart" class="w-5 h-5"></i> Add to Cart / إضافة إلى السلة
           </button>
 
-          <!-- Instant Delivery & Guarantee Badge -->
           <div class="bg-green-500/10 border border-green-500/20 p-4 rounded-xl flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center shrink-0">
               <i data-lucide="shield-check" class="w-5 h-5"></i>
@@ -908,7 +907,6 @@
             </div>
           </div>
 
-          <!-- Key Features Section -->
           <div class="bg-black/30 p-4 rounded-xl border border-card space-y-3">
             <h3 class="font-bold text-xs text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
               <i data-lucide="zap" class="w-4 h-4 text-accent-red"></i> Key Features / مميزات اللعبة
@@ -918,7 +916,6 @@
             </ul>
           </div>
 
-          <!-- Story or Subscription Overview Section -->
           <div class="border-t border-card pt-5 space-y-4">
             <h3 class="font-bold text-base text-gray-200 flex items-center gap-2">
               <i data-lucide="book-open" class="w-4 h-4 text-accent-red"></i> ${product.category === 'games' ? 'Story & Overview / القصة ونظرة عامة' : 'Subscription Details & Benefits / تفاصيل الاشتراك والمميزات'}
@@ -931,7 +928,6 @@
             </div>
           </div>
 
-          <!-- Related Products / Subscriptions Section -->
           ${relatedHTML}
         </div>
       `;
@@ -950,6 +946,19 @@
 
     function addToCartFromMain(productId) {
       addToCart(productId);
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = "bg-card border border-red-500/50 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 pointer-events-auto transition-all animate-bounce";
+      toast.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-accent-red"></i> <span>${message}</span>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
     }
 
     function addToCart(productId) {
@@ -977,7 +986,7 @@
       }
 
       updateCart();
-      toggleCart();
+      showToast(`Added ${product.title} to cart!`);
     }
 
     function changeQuantity(cartItemId, delta) {
@@ -999,6 +1008,14 @@
     function updateCart() {
       const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
       document.getElementById('cart-count').innerText = totalItemsCount;
+      
+      const cartBtn = document.getElementById('cart-btn');
+      if (totalItemsCount > 0) {
+        cartBtn.className = "relative p-2.5 bg-accent-red/10 rounded-xl border border-red-500 text-white hover:border-red-400 transition flex items-center justify-center btn-glow";
+      } else {
+        cartBtn.className = "relative p-2.5 bg-card rounded-xl border border-card text-white hover:border-red-500 transition flex items-center justify-center";
+      }
+
       const cartItemsContainer = document.getElementById('cart-items');
       cartItemsContainer.innerHTML = '';
 
@@ -1006,19 +1023,25 @@
 
       if (cart.length === 0) {
         cartItemsContainer.innerHTML = `
-          <div class="flex flex-col items-center justify-center py-20 text-center space-y-3">
-            <div class="w-16 h-16 bg-card border border-card rounded-full flex items-center justify-center text-gray-500 shadow-inner">
-              <i data-lucide="shopping-bag" class="w-8 h-8 text-accent-red opacity-80"></i>
+          <div class="h-full flex flex-col items-center justify-center text-center py-6 px-4 space-y-4 my-auto">
+            <div class="w-20 h-20 bg-gradient-to-b from-red-500/20 to-transparent border border-red-500/30 rounded-full flex items-center justify-center shadow-inner relative">
+              <div class="absolute inset-0 rounded-full bg-red-500/10 blur-md"></div>
+              <i data-lucide="shopping-bag" class="w-9 h-9 text-accent-red relative z-10"></i>
             </div>
-            <h4 class="font-bold text-base text-gray-300">Your cart is empty</h4>
-            <p class="text-xs text-gray-500 max-w-[220px]">Explore our store and add your favorite games or subscriptions to get started!</p>
+            <div class="space-y-1">
+              <h4 class="font-extrabold text-base text-gray-200">Your Cart is Empty</h4>
+              <p class="text-xs text-gray-400 max-w-[240px] leading-relaxed">Discover our amazing collection of games & subscriptions and start adding items!</p>
+            </div>
+            <button onclick="toggleCart()" class="mt-2 px-5 py-2.5 bg-card hover:bg-gray-800 border border-card text-xs font-bold text-gray-300 rounded-xl transition shadow-sm">
+              Explore Store / تصفح المتجر
+            </button>
           </div>
         `;
       } else {
         cart.forEach(item => {
           totalEGP += (item.priceEGP * item.quantity);
           const itemEl = document.createElement('div');
-          itemEl.className = "bg-black/40 border border-card p-3 rounded-2xl flex items-center gap-3 card-glow relative";
+          itemEl.className = "bg-black/40 border border-card p-3 rounded-2xl flex items-center gap-3 card-glow relative shrink-0";
           itemEl.innerHTML = `
             <img src="${item.image}" alt="${item.title}" class="w-14 h-14 rounded-xl object-cover border border-card shrink-0" onerror="this.onerror=null; this.src='https://via.placeholder.com/100/111/fff?text=Game';">
             
